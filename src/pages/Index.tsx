@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMAGE = "https://cdn.poehali.dev/projects/8e6a258d-21ee-4204-a204-467064960ca3/files/b980f962-10da-415e-87ef-c25408d214c0.jpg";
+const HERO_IMAGE = "https://cdn.poehali.dev/projects/8e6a258d-21ee-4204-a204-467064960ca3/bucket/33321ca4-f8a6-485d-a69d-9dadbe88fa55.png";
 
 type Section = "home" | "articles" | "forum" | "events" | "about" | "contact";
 
@@ -249,9 +249,10 @@ const Index = () => {
               <img
                 src={HERO_IMAGE}
                 alt="Родительский клуб"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain object-center"
+                style={{ filter: "saturate(0.55) brightness(0.92)" }}
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#2C2C2C]/10 via-transparent to-[#FAFAF8]" />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#FAFAF8]/30 via-transparent to-[#FAFAF8]" />
               <div className="relative h-full flex flex-col justify-end pb-16 px-6 max-w-6xl mx-auto">
                 <div className="max-w-xl">
                   <span className="text-xs font-medium tracking-widest uppercase text-[#8B6E4E] mb-4 block">
