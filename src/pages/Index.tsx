@@ -257,11 +257,11 @@ const Index = () => {
                   <span className="text-xs font-medium tracking-widest uppercase text-[#8B6E4E] mb-4 block">
                     Сообщество родителей
                   </span>
-                  <h1 className="font-cormorant text-5xl md:text-7xl font-light leading-[1.1] text-[#2C2C2C] mb-6">
-                    Растём<br />
-                    <em>вместе</em>
+                  <h1 className="font-cormorant text-5xl md:text-7xl font-light leading-[1.1] text-[#111111] mb-6">
+                    Особый<br />
+                    <em>ритм</em>
                   </h1>
-                  <p className="text-[#6B6B6B] text-lg leading-relaxed mb-8 max-w-sm">
+                  <p className="text-[#3A3A3A] text-lg leading-relaxed mb-8 max-w-sm">
                     Пространство, где родители находят знания, поддержку и живое общение.
                   </p>
                   <div className="flex gap-4 flex-wrap">
