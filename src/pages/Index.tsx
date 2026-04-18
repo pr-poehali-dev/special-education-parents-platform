@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
+import EditableText from "@/components/EditableText";
+import { useEditableContent } from "@/hooks/useEditableContent";
 
 const HERO_IMAGE = "https://cdn.poehali.dev/projects/8e6a258d-21ee-4204-a204-467064960ca3/bucket/33321ca4-f8a6-485d-a69d-9dadbe88fa55.png";
 
@@ -179,6 +181,7 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [archiveFilter, setArchiveFilter] = useState("Все");
+  const { content, set, editMode, setEditMode, reset } = useEditableContent();
 
   const scrollTo = (id: Section) => {
     setActiveSection(id);
@@ -214,6 +217,27 @@ const Index = () => {
                 )}
               </button>
             ))}
+            <button
+              onClick={() => { setEditMode(!editMode); }}
+              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 border transition-colors ${
+                editMode
+                  ? "border-[#8B6E4E] bg-[#8B6E4E] text-white"
+                  : "border-[#E8E4DC] text-[#9B9B9B] hover:border-[#8B6E4E] hover:text-[#8B6E4E]"
+              }`}
+              title="Режим редактирования текстов"
+            >
+              <Icon name={editMode ? "Check" : "Pencil"} size={12} />
+              {editMode ? "Сохранить" : "Редактировать"}
+            </button>
+            {editMode && (
+              <button
+                onClick={reset}
+                className="text-xs text-[#9B9B9B] hover:text-red-400 transition-colors"
+                title="Сбросить все изменения"
+              >
+                Сбросить
+              </button>
+            )}
           </nav>
           <button
             className="md:hidden p-2 text-[#6B6B6B]"
@@ -255,16 +279,36 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-[#FAFAF8]/30 via-transparent to-[#FAFAF8]" />
               <div className="relative h-full flex flex-col justify-end pb-16 px-6 max-w-6xl mx-auto">
                 <div className="max-w-xl">
-                  <span className="text-xs font-medium tracking-widest uppercase text-[#8B6E4E] mb-4 block">
-                    Сообщество родителей
-                  </span>
+                  <EditableText
+                    value={content.hero_badge}
+                    onChange={(v) => set("hero_badge", v)}
+                    editMode={editMode}
+                    tag="span"
+                    className="text-xs font-medium tracking-widest uppercase text-[#8B6E4E] mb-4 block"
+                  />
                   <h1 className="font-cormorant text-5xl md:text-7xl font-light leading-[1.1] text-[#111111] mb-6">
-                    Особый<br />
-                    <em>ритм</em>
+                    <EditableText
+                      value={content.hero_title_1}
+                      onChange={(v) => set("hero_title_1", v)}
+                      editMode={editMode}
+                    />
+                    <br />
+                    <em>
+                      <EditableText
+                        value={content.hero_title_2}
+                        onChange={(v) => set("hero_title_2", v)}
+                        editMode={editMode}
+                      />
+                    </em>
                   </h1>
-                  <p className="text-[#3A3A3A] text-lg leading-relaxed mb-8 max-w-sm">
-                    Пространство, где родители находят знания, поддержку и живое общение.
-                  </p>
+                  <EditableText
+                    value={content.hero_subtitle}
+                    onChange={(v) => set("hero_subtitle", v)}
+                    editMode={editMode}
+                    tag="p"
+                    multiline
+                    className="text-[#3A3A3A] text-lg leading-relaxed mb-8 max-w-sm"
+                  />
                   <div className="flex gap-4 flex-wrap">
                     <button
                       onClick={() => scrollTo("articles")}
@@ -286,15 +330,27 @@ const Index = () => {
             {/* Stats */}
             <section className="py-16 border-b border-[#E8E4DC]">
               <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-                {[
-                  { value: "240+", label: "Участников клуба" },
-                  { value: "85", label: "Статей и видео" },
-                  { value: "30", label: "Встреч проведено" },
-                  { value: "4 года", label: "Работаем вместе" },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="font-cormorant text-4xl font-light text-[#8B6E4E] mb-1">{stat.value}</div>
-                    <div className="text-xs text-[#9B9B9B] uppercase tracking-wider">{stat.label}</div>
+                {([
+                  { vKey: "stat_1_value", lKey: "stat_1_label" },
+                  { vKey: "stat_2_value", lKey: "stat_2_label" },
+                  { vKey: "stat_3_value", lKey: "stat_3_label" },
+                  { vKey: "stat_4_value", lKey: "stat_4_label" },
+                ] as const).map((s) => (
+                  <div key={s.vKey} className="text-center">
+                    <EditableText
+                      value={content[s.vKey]}
+                      onChange={(v) => set(s.vKey, v)}
+                      editMode={editMode}
+                      tag="div"
+                      className="font-cormorant text-4xl font-light text-[#8B6E4E] mb-1"
+                    />
+                    <EditableText
+                      value={content[s.lKey]}
+                      onChange={(v) => set(s.lKey, v)}
+                      editMode={editMode}
+                      tag="div"
+                      className="text-xs text-[#9B9B9B] uppercase tracking-wider"
+                    />
                   </div>
                 ))}
               </div>
@@ -350,10 +406,19 @@ const Index = () => {
             <section className="bg-[#F0EDE6] py-20">
               <div className="max-w-3xl mx-auto px-6 text-center">
                 <blockquote className="font-cormorant text-3xl md:text-4xl font-light italic text-[#2C2C2C] leading-relaxed mb-6">
-                  «Быть родителем — это не должность, это постоянное путешествие открытий.»
+                  <EditableText
+                    value={content.quote_text}
+                    onChange={(v) => set("quote_text", v)}
+                    editMode={editMode}
+                    multiline
+                  />
                 </blockquote>
                 <cite className="text-xs text-[#9B9B9B] uppercase tracking-wider not-italic">
-                  Миссия нашего клуба
+                  <EditableText
+                    value={content.quote_author}
+                    onChange={(v) => set("quote_author", v)}
+                    editMode={editMode}
+                  />
                 </cite>
               </div>
             </section>
